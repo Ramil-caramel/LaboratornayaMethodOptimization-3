@@ -530,7 +530,7 @@ func (simptab *SimplexTable) GetAnswerAndCheck(checkTable *SimplexTable) {
 	}
 }
 
-func Simplex(c_vector []float64, b_vector []float64, a_matrix [][]float64, sign_vector []bool, view bool, iteration int) {
+func Simplex(c_vector []float64, b_vector []float64, a_matrix [][]float64, sign_vector []bool, view bool, iteration int, answerSlice *[]SimplexTable) {
 
 	red := "\033[31m"
 	reset := "\033[0m"
@@ -593,16 +593,17 @@ func Simplex(c_vector []float64, b_vector []float64, a_matrix [][]float64, sign_
 			b_vector2 = append(b_vector2, ogr+1)
 
 			fmt.Printf("%s│  ├─ Ветка 1: %s <= %.0f", indent, simptab.Basis[i], ogr)
-			Simplex(c_vector, b_vector1, a_matrix1, sign_vector1, view, iteration+1)
+			Simplex(c_vector, b_vector1, a_matrix1, sign_vector1, view, iteration+1,answerSlice)
 
 			fmt.Printf("%s│  └─ Ветка 2: %s >= %.0f", indent, simptab.Basis[i], ogr+1)
-			Simplex(c_vector, b_vector2, a_matrix2, sign_vector2, view, iteration+1)
+			Simplex(c_vector, b_vector2, a_matrix2, sign_vector2, view, iteration+1,answerSlice)
 
 			fmt.Printf("%s└──────────────────────────────────────────────\n", indent)
 
 			return
 		}
 	}
+	*answerSlice = append(*answerSlice, *simptab)
 	
 	fmt.Printf("%s│ %sНайдено целочисленное решение%s\n", indent, green, reset)
 	fmt.Printf("%s└──────────────────────────────────────────────\n", indent)

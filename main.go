@@ -14,7 +14,13 @@ func main() {
 	b_vector := []float64{4, 7, 8}
 
 	a_matrix := [][]float64{{3, 1, 1}, {1, 4, 0}, {0, 0.5, 2}}
-	simptab.Simplex(c_vector, b_vector, a_matrix, []bool{true, true, true}, true, 0)
+	answer := make([]simptab.SimplexTable, 0, 10)
+	simptab.Simplex(c_vector, b_vector, a_matrix, []bool{true, true, true}, true, 0, &answer)
+
+	table := simptab.NewTable(c_vector, b_vector, a_matrix, []bool{true, true, true}, true)
+	for _,val:= range answer {
+		val.GetAnswerAndCheck(table)
+	}
 
 	maxVals := make([]int, len(c_vector))
 	for j := 0; j < len(c_vector); j++ {
